@@ -1,0 +1,65 @@
+<div *ngIf="visible" class="container">
+  <div class="nav-bar">
+    <img src="assets/img/morfilms.png">
+  </div>
+  <div class="film-backdrop" *ngIf="film.backdrop_path || film.poster_path" [ngStyle]="{'background-image': getBackdrop()}">
+    <div class="film-gradient"></div>
+    <div class="film-title">{{ film.title.toUpperCase() }}</div>
+    <div *ngIf="film.release_country_days < 999 && film.release_country_days > 0" class="list-days-remaining">
+      {{ film.release_country_days }}<br><span style="font-size: 9px;">{{ 'Days' | translate }}</span>
+    </div>
+  </div>
+  <h2 *ngIf="!film.backdrop_path && !film.poster_path"> {{film.title}} </h2>
+  <div class="film-info">
+    <div class="film-metadata">
+      <span class="span" *ngIf="getRuntime()">{{getRuntime()}}min</span>
+      <span class="span" *ngIf="getRuntime() && getGenres().length > 0"> | </span>
+      <span class="span" *ngFor="let genre of getGenres(); let isLast=last">{{genre}}{{isLast ? '' : ', '}}</span>
+      <span class="span" *ngIf="getGenres().length > 0 && getReleaseDate()"> | </span>
+      <span class="span" *ngIf="getReleaseDate()">{{getReleaseDate()}}</span>
+    </div>
+    <div class="film-credits" *ngIf="getDirector().length > 0 || getCast().length > 0">
+          <div *ngIf="getDirector().length > 0">
+            <b>{{ 'Director' | translate }}: </b>
+            <span *ngFor="let director of getDirector(); let isLast=last">
+              {{ director.name }}{{ isLast ? '.' : ', ' }}
+            </span>
+          </div>
+          <div *ngIf="getCast().length > 0">
+          <b>{{ 'Cast' | translate }}: </b>
+          <span *ngFor="let cast of getCast(); let isLast=last">
+              {{ cast.name }}{{ isLast ? '.' : ', ' }}
+            </span>
+          </div>
+    </div>
+    <div class="film-overview">
+      {{ film.overview }}
+    </div>
+  </div>
+  <a [href]="gotoMorfilms()">
+    <div class="action-button">
+      <span>{{ 'Open using Morfilms' | translate }}</span>
+      <i class="icon ion-android-arrow-forward"></i> 
+    </div>
+  </a>
+  <a [href]="gotoIMDB()">
+    <div *ngIf="film.imdb_id" class="action-button">
+      <span>{{ 'Open using IMDB' | translate }}</span>
+      <i class="icon ion-android-arrow-forward"></i> 
+    </div>
+  </a>
+  <a [href]="gotoYouTube()">
+    <div *ngIf="getTrailer()" class="action-button">
+      <span>{{ 'Play Trailer on YouTube' | translate }}</span>
+      <i class="icon ion-android-arrow-forward"></i> 
+    </div>
+  </a>
+  <div class="download-buttons">
+    <div class="download-ios" [ngStyle]="{'background-image': 'url(assets/img/' + lang + '_badge_appstore.png)'}">
+      <a href="https://itunes.apple.com/us/app/morfilms-upcoming-movies-list/id1207671266?ls=1&mt=8"></a>
+    </div>
+    <div class="download-android" [ngStyle]="{'background-image': 'url(assets/img/' + lang + '_badge_googleplay.png)'}">
+      <a href="https://play.google.com/store/apps/details?id=eu.morfilms.watchlist"></a>
+    </div>
+  </div>
+</div>
